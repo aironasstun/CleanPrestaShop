@@ -14,7 +14,6 @@ RUN a2enmod ssl
 RUN pecl install xdebug \
     && docker-php-ext-enable xdebug
 
-ADD ./docker/ssl /etc/apache2/ssl
 ADD ./docker/php/php.ini /usr/local/etc/php/php.ini
 
 ADD ./docker/site.conf /etc/apache2/sites-available/000-default.conf
