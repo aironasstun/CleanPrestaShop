@@ -1,17 +1,13 @@
 # CleanPrestaShop
 Prestashop 8 docker image with xdebug for development
 
-Creates a new prestashop.
-
-Web: 
-
-Phpmyadmin: 
+Creates a fresh prestashop installation.
 
 * Links
     1. Website: [localhost:1000](localhost:1000)
     2. PhpMyAdmin: [localhost:1002](localhost:1002)
     3. Mariadb: [localhost:1008](localhost:1008)
-  or mariadb when setuping project.
+  or mariadb when setting up project.
 
 # Setup
 
