@@ -1,0 +1,24 @@
+FROM prestashop/prestashop:8.0.0-8.0-apache
+
+RUN apt-get update -qq \
+    && DEBIAN_FRONTEND=noninteractive apt-get install -y git \
+    mariadb-client wget curl \
+    ca-certificates lsb-release apt-transport-https gnupg bsdmainutils
+
+#Adding package
+RUN pecl install zip
+
+RUN a2enmod ssl
+
+# XDebug extension
+RUN pecl install xdebug \
+    && docker-php-ext-enable xdebug
+
+ADD ./docker/ssl /etc/apache2/ssl
+ADD ./docker/php/php.ini /usr/local/etc/php/php.ini
+
+ADD ./docker/site.conf /etc/apache2/sites-available/000-default.conf
+
+
+EXPOSE 443
+EXPOSE 80

@@ -1,0 +1,50 @@
+version: '3.3'
+
+services:
+  prestashop:
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile.prestashop
+    # image: prestashop/prestashop:8.0.0-8.0-apache
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    ports:
+      - 1000:80
+    links:
+      - mariadb:mariadb
+    depends_on:
+      - mariadb
+    user: "${UID}:${GID}" # <= .Read from env
+    volumes:
+      - ./:/var/www/html/:delegated
+      - ./docker/php/conf.d/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+      - ./docker/php/conf.d/error_reporting.ini:/usr/local/etc/php/conf.d/error_reporting.ini
+    environment:
+      - PS_DEV_MODE=1
+      - DB_SERVER=mariadb
+      - PS_SSL_ENABLED=1
+      - DB_USER=root
+      - DB_PASSWD=root
+      - DB_NAME=prestashop
+      - PS_INSTALL_AUTO=0
+
+  mariadb:
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile.database
+    ports:
+      - "1008:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=prestashop
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    links:
+      - mariadb
+    ports:
+      - 1002:80
+    environment:
+      - PMA_HOST=mariadb
+      - PMA_USER=root
+      - PMA_PASSWORD=root
